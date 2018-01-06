@@ -1,0 +1,5 @@
+.vscode/*
+secrets.json
+
+__pychache__/*
+utils/__pychache__/*
