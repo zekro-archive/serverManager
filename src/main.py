@@ -4,8 +4,9 @@
 
 import os
 import sys
-from utils import colors, msgs
+from utils import colors, msgs, system
 import subprocess
+import json
 
 # getting start arguments (later essential for direct start / stpo with args)
 args = sys.argv
@@ -13,6 +14,7 @@ last_inpt = ""
 
 clr = colors.Colors
 msgs = msgs.Msgs
+perf = system.Sys
 
 
 def get_servers():
@@ -72,8 +74,10 @@ def print_main():
             "| SERVER MANAGEMENT SYSTEM        |\n" +
             "| Version 2.0                     |\n" +
             "| (c) 2018 Ringo Hoffmann (zekro) |\n" +
-            "+---------------------------------+\n\n"
+            "+---------------------------------+\n"
     ))
+
+    print(perf.getSys() + "\n")
 
     def _pad(string):
         """
