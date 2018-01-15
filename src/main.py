@@ -113,6 +113,38 @@ def handle_command(cmd, servers):
             except Exception, e:
                 input(clr.w.r("[ERROR] ") + "An unexpected error occured while starting:\n" + e)
 
+    # Stop command
+    elif invoke == "stop":
+        if len(args) == 0:
+            input("USAGE: stop [ind/name]\n")
+            return
+        server = _select(args)
+        if not server:
+            input(clr.w.r("[ERROR] ") + "Can not find server '%s'..." % (" ".join(args)))
+        if not is_running(server):
+            input(clr.w.r("[ERROR] ") + "You can not stop a not running server...")
+        else
+            try:
+                subprocess.call(["screen", "-X", "-S", server, "quit"])
+            except Exception, e:
+                input(clr.w.r("[ERROR] ") + "An unexpected error occured while stopping:\n" + e)
+
+    # Resume command
+    elif invoke == "resume":
+        if len(args) == 0:
+            input("USAGE: resume [ind/name]\n")
+            return
+        server = _select(args)
+        if not server:
+            input(clr.w.r("[ERROR] ") + "Can not find server '%s'..." % (" ".join(args)))
+        if not is_running(server):
+            input(clr.w.r("[ERROR] ") + "You can not resume a stopped server...")
+        else
+            try:
+                subprocess.call(["screen", "-r", server])
+            except Exception, e:
+                input(clr.w.r("[ERROR] ") + "An unexpected error occured while resuming:\n" + e)
+
 
 def print_main(servers):
     """
