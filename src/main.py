@@ -16,6 +16,8 @@ clr = colors.Colors
 msgs = msgs.Msgs
 perf = system.Sys
 
+def clear():
+    subprocess.call("clear")
 
 def get_servers():
     """
@@ -58,22 +60,41 @@ def handle_command(cmd):
     """
     Handling commands.
     """
-    pass
+    invoke = cmd.split()[0]
+    args = cmd.split()[1:]
+    
+    if invoke == "help":
+        clear()
+        print(
+            " \n [...] - Essential argument\n"
+            " ([...]) - Optional argument\n"
+            " [.../...] - min. one of more arguments required\n\n"
+            "   help                Display this help message\n"
+            "   start [ind/name]    Start server\n"
+            "   stop [ind/name]     Stop server\n"
+            "   resume [ind/name]   Resume a screen session\n"
+            "   backup [ind/name]   Create a backup of a server\n"
+            "   logs (p)            Display log from 'screenlog.0'\n"
+            "                       (p) -> Create file in apache server to display\n"
+            "                              log online\n\n"
+            " [Press enter to continue...]"
+        )
+        input()
 
 
 def print_main():
     """
     Printing main GUI and returns input command.
     """
-    subprocess.call("clear")
+    clear()
     servers = get_servers()
     # Just for running the start message
     print(clr.w.b(
             "\n" +
-            "+---------------------------------+\n" +
-            "| SERVER MANAGEMENT SYSTEM        |\n" +
-            "| Version 2.0                     |\n" +
-            "| (c) 2018 Ringo Hoffmann (zekro) |\n" +
+            "+---------------------------------+\n"
+            "| SERVER MANAGEMENT SYSTEM        |\n"
+            "| Version 2.0                     |\n"
+            "| (c) 2018 Ringo Hoffmann (zekro) |\n"
             "+---------------------------------+\n"
     ))
 
