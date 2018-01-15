@@ -56,16 +56,31 @@ def get_start_script(server):
     return open(server + "/run.sh").readline()
 
 
-def handle_command(cmd):
+def handle_command(cmd, servers):
     """
     Handling commands.
     """
+    if not servers:
+        servers = get_servers()
     invoke = cmd.split()[0]
     args = cmd.split()[1:]
-    
+
+    def _select(args):
+        try:
+            ind = int(args[0]) - 1
+            if ind > len(servers) or ind < 0:
+                return None
+            return servers[ind]
+        except:
+            for s in servers:
+                if " ".join(args).lower() in s.lower():
+                    return s
+            return None
+
+    # Help command
     if invoke == "help":
         clear()
-        print(
+        input(
             " \n [...] - Essential argument\n"
             " ([...]) - Optional argument\n"
             " [.../...] - min. one of more arguments required\n\n"
@@ -77,17 +92,35 @@ def handle_command(cmd):
             "   logs (p)            Display log from 'screenlog.0'\n"
             "                       (p) -> Create file in apache server to display\n"
             "                              log online\n\n"
-            " [Press enter to continue...]"
+            " [Press enter to continue...]\n\n"
         )
-        input()
+
+    # Start command
+    elif invoke == "start":
+        if len(args) == 0:
+             input("USAGE: start [ind/name]\n")
+             return
+        server = _select(args)
+        if not server:
+            input(clr.w.r("[ERROR] ") + "Can not find server '%s'..." % (" ".join(args)))
+        elif is_running(server):
+            input(clr.w.r("[ERROR] ") + "You can not start a still running server...")
+        elif not get_start_script(server):
+            input(clr.w.r("[ERROR] ") + "The start script of the server is empty...")
+        else
+            try:
+                subprocess.call(["screen", "-S", server, "-L", "sh", "runner.sh", get_start_script(server)])
+            except Exception, e:
+                input(clr.w.r("[ERROR] ") + "An unexpected error occured while starting:\n" + e)
 
 
-def print_main():
+def print_main(servers):
     """
     Printing main GUI and returns input command.
     """
     clear()
-    servers = get_servers()
+    if not servers:
+        servers = get_servers()
     # Just for running the start message
     print(clr.w.b(
             "\n" +
@@ -143,5 +176,6 @@ def print_main():
 # MAIN SECTION
 
 while last_inpt not in ["exit", "stop", "e", "s"]:
-    last_inpt = print_main()
-    handle_command(last_inpt)
+    servers = get_servers()
+    last_inpt = print_main(servers)
+    handle_command(last_inpt, servers)

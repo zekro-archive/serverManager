@@ -14,15 +14,19 @@ This is a script where you can start screens, stop them, resume the sessions, ma
 ## TODO
 
 - [ ] Add commands
-    - [ ] start
+    - [ ] start *(1)*
     - [ ] stop
     - [ ] resume
     - [ ] backup
     - [ ] logs
-    - [x] stop
+    - [ ] stop
     - [ ] *rename (?)*
+    - [x] help
+    - [x] exit
 - [ ] Add args handling  
 *Starning and stopping the server directly with start arguments of the script. For example like this:*  
 `main.py start servername`
 - [ ] Config  
 *To set stuff like servers location, backup location...* 
+
+*(1) - Implemented, needs to be tested in a real server envoirement.*
