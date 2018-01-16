@@ -25,7 +25,11 @@ This is a script where you can start screens, stop them, resume the sessions, ma
 
 > The start file automatically updates the repository when starting.  
 If you don't want to update at start, execute the script like following:  
-`$ sh start.sh noupdate`
+`$ sh start.sh noupdate`  
+You can also disable auto-updating completely with  
+`$ sh start.sh disable-update`  
+Then you can re-enable it with  
+`$ sh start.sh enable-update`
 
 ---
 

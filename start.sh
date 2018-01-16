@@ -4,6 +4,9 @@
 # from GitHub master branch. (For this, you need to install git)
 # If you don't want to auto-update, start the tool with the parameter
 # 'noupdate'.
+# If you want to disable update check completely after start, use
+# parameter 'disable-update'. (You can re-enable it with the parameter
+# 'enable-update').
 # You can also rename this script to somethign like 's' or so to
 # fastly start with 'sh s'.
 
@@ -25,20 +28,42 @@ type python >/dev/null 2>&1 || {
 
 # echo $1; exit
 
+if [ "$1" = "disable-update" ]
+then
+    echo " " >> DISABLEUPDATE
+fi
+
+if [ "$1" = "enable-update" ]
+then
+    if [ -f DISABLEUPDATE ]
+    then
+        rm DISABLEUPDATE
+    fi
+fi
+
 if ! $git
 then
     echo "Git is not accessable!"
     echo "Can not automatically pull updated from origin repository!"
 else
-    if ! [ "$1" = "noupdate" ]
+    if [ -f DISABLEUPDATE ]
     then
-        echo "Pulling update from origin repository..."
-        echo "-----------------------------------------"
-        git init
-        git remote add origin https://github.com/zekroTJA/serverManager.git
-        git pull origin master
-        echo "-----------------------------------------"
-        echo "Completed updating repository."
+        echo "AUTO-UPDATE DISABLED!"
+        echo "You can re-enable it with parameter 'enable-update'"
+        echo ""
+        echo "[Starting in 3 seconds...]"
+        sleep 3
+    else
+        if [ ! "$1" = "noupdate" ]
+        then
+            echo "Pulling update from origin repository..."
+            echo "-----------------------------------------"
+            git init
+            git remote add origin https://github.com/zekroTJA/serverManager.git
+            git pull origin master
+            echo "-----------------------------------------"
+            echo "Completed updating repository."
+        fi
     fi
 fi
 
