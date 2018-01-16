@@ -11,15 +11,32 @@ This is a script where you can start screens, stop them, resume the sessions, ma
 
 ---
 
+## Installation
+
+1. For best experience, you need to install:
+    - [git](https://git-scm.com)
+    - [Python](https://www.python.org/) *>= v.3.0*
+
+2. Clone the repository with  
+`$ git clone https://github.com/zekroTJA/serverManager.git`
+
+3. Then cd into the repository and start the start file with  
+`$ sh start.sh`
+
+> The start file automatically updates the repository when starting.  
+If you don't want to update at start, execute the script like following:  
+`$ sh start.sh noupdate`
+
+---
+
 ## TODO
 
 - [ ] Add commands
-    - [ ] start *(1)*
-    - [ ] stop
-    - [ ] resume
+    - [x] start *(1)*
+    - [x] stop *(1)*
+    - [x] resume *(1)*
     - [ ] backup
     - [ ] logs
-    - [ ] stop
     - [ ] *rename (?)*
     - [x] help
     - [x] exit

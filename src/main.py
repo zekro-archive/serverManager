@@ -107,10 +107,10 @@ def handle_command(cmd, servers):
             input(clr.w.r("[ERROR] ") + "You can not start a still running server...")
         elif not get_start_script(server):
             input(clr.w.r("[ERROR] ") + "The start script of the server is empty...")
-        else
+        else:
             try:
-                subprocess.call(["screen", "-S", server, "-L", "sh", "runner.sh", get_start_script(server)])
-            except Exception, e:
+                subprocess.call(["screen", "-S", server, "-L", "sh", "src/runner.sh", get_start_script(server)])
+            except Exception as e:
                 input(clr.w.r("[ERROR] ") + "An unexpected error occured while starting:\n" + e)
 
     # Stop command
@@ -123,10 +123,10 @@ def handle_command(cmd, servers):
             input(clr.w.r("[ERROR] ") + "Can not find server '%s'..." % (" ".join(args)))
         if not is_running(server):
             input(clr.w.r("[ERROR] ") + "You can not stop a not running server...")
-        else
+        else:
             try:
                 subprocess.call(["screen", "-X", "-S", server, "quit"])
-            except Exception, e:
+            except Exception as e:
                 input(clr.w.r("[ERROR] ") + "An unexpected error occured while stopping:\n" + e)
 
     # Resume command
@@ -139,10 +139,10 @@ def handle_command(cmd, servers):
             input(clr.w.r("[ERROR] ") + "Can not find server '%s'..." % (" ".join(args)))
         if not is_running(server):
             input(clr.w.r("[ERROR] ") + "You can not resume a stopped server...")
-        else
+        else:
             try:
                 subprocess.call(["screen", "-r", server])
-            except Exception, e:
+            except Exception as e:
                 input(clr.w.r("[ERROR] ") + "An unexpected error occured while resuming:\n" + e)
 
 
@@ -179,6 +179,11 @@ def print_main(servers):
             out += " "
         return out
 
+    def _cut(string, cap):
+        if len(string) > cap:
+            return string[:cap - 3] + "..."
+        return string
+
     def _indify(inp):
         """
         If there are more than 10 servers in the list,
@@ -199,7 +204,7 @@ def print_main(servers):
     for s in servers:
         ind += 1
         print(
-            _running(s) + clr.w.b("[%s] " % _indify(ind)) + _pad(s) + clr.w.p("['%s']" % get_start_script(s))
+            _running(s) + clr.w.b("[%s] " % _indify(ind)) + _pad(s) + clr.w.p("['%s']" % _cut(get_start_script(s), 35))
         )
 
     return input("\n\nEnter 'help' for a list of commands.\n> ")
