@@ -1,7 +1,7 @@
  <div align="center">
      <h1>~ Server Management System ~</h1>
      <strong>A management system for servers running with screen application</strong><br><br>
-     <a href="" ><img src="https://img.shields.io/badge/state-in%20early%20development%20phase-21dd9b.svg" /></a>
+     <a href="" ><img src="https://img.shields.io/badge/state-tests%20running%20in%20my%20real%20server%20envoirement-21dd9b.svg" /></a>
  </div>
 
  ---
@@ -36,9 +36,9 @@ Then you can re-enable it with
 ## TODO
 
 - [ ] Add commands
-    - [x] start <img height="20" src="https://img.shields.io/badge/status*-passed-green.svg">
-    - [x] stop *(1)*
-    - [x] resume 
+    - [x] start
+    - [x] stop
+    - [x] resume
     - [ ] backup
     - [ ] logs
     - [ ] *rename (?)*
@@ -49,5 +49,3 @@ Then you can re-enable it with
 `main.py start servername`
 - [ ] Config  
 *To set stuff like servers location, backup location...* 
-
-*\* - Test status in my real server evnoirement on my VPS.*
