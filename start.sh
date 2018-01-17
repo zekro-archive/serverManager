@@ -15,19 +15,39 @@ py3=true
 py=true
 
 # Testing if 'git' command works
-type git >/dev/null 2>&1 || {
-    git=false
-}
+type git >/dev/null 2>&1 || git=false
 
 # Testing if 'python3' command works
-type python3 >/dev/null 2>&1 || {
-    py3=false
-}
+type python3 >/dev/null 2>&1 || py3=false
 
 # Testing if 'python' command works
-type python >/dev/null 2>&1 || {
-    py=false
+type python >/dev/null 2>&1 || py=false
+
+
+if $py3
+then
+    check_cmd="pip3"
+else
+    check_cmd="pip"
+fi
+
+# Checks if the required python packages are
+# installed
+type $check_cmd >/dev/null 2>&1 && {
+    echo "Testing for required packages..."
+    printf "  - psutil: "
+    echo $(pip3 list --format=columns) | grep "psutil" --silent
+    if [ $? = 1 ]
+    then
+        printf "will be installed... "
+        $check_cmd install psutil >/dev/null
+        echo "installed"
+    else
+        echo "installed"
+    fi
+    echo ""
 }
+
 
 # When 'disable-updat' parameter is given, there will be
 # created a file named 'DISABLEUPDATE' in root directory
@@ -65,8 +85,11 @@ else
     then
         # if you want to disable the warning message, just delete this #
         # part of code.                                                #
-        echo "AUTO-UPDATE DISABLED!"                                   #
-        echo "You can re-enable it with parameter 'enable-update'"     #
+        echo ""                                                        #
+        echo "#######################################################" #
+        echo "#              AUTO-UPDATE DISABLED!                  #" #
+        echo "# You can re-enable it with parameter 'enable-update' #" #
+        echo "#######################################################" #
         echo ""                                                        #
         echo "[Starting in 3 seconds...]"                              #
         sleep 3                                                        #

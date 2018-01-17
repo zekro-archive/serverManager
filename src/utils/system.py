@@ -1,4 +1,7 @@
 import psutil
+from utils import colors
+
+c = colors.Colors
 
 class Sys:
     def getSys():
@@ -13,16 +16,21 @@ class Sys:
         diskload = disk.percent
 
         def _getBar(val):
-            return "||||||||||||||||||||"[:int(20 * val / 100)]
+            if val < 33:
+                return c.w.g("||||||||||||||||||||"[:int(20 * val / 100)])
+            elif val < 75:
+                return c.w.o("||||||||||||||||||||"[:int(20 * val / 100)])
+            else:
+                return c.w.r("||||||||||||||||||||"[:int(20 * val / 100)])
 
         def _getSpace(val):
             return "                    "[:20 - int((20 * val / 100))]
 
         return str(
             """
-CPU:    [%s%s] %d %%
-RAM:    [%s%s] %d %%
-Space:  [%s%s] %d %%
+  CPU:    [%s%s] %d %%
+  RAM:    [%s%s] %d %%
+  Space:  [%s%s] %d %%
             """ % (
                 _getBar(cpulaod),
                 _getSpace(cpulaod),

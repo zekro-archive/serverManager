@@ -7,6 +7,7 @@ import sys
 from utils import colors, msgs, system
 import subprocess
 import json
+import shutil
 
 # getting start arguments (later essential for direct start / stpo with args)
 args = sys.argv
@@ -204,7 +205,7 @@ def print_main(servers):
         """
         Returns status string for server list.
         """
-        return clr.w.g("[RUNNING] ") if is_running(s) else clr.w.o("[STOPPED] ")
+        return clr.w.g(" [RUNNING] ") if is_running(s) else clr.w.o(" [STOPPED] ")
 
     ind = 0
     for s in servers:

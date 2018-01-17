@@ -8,6 +8,7 @@
 This is a script where you can start screens, stop them, resume the sessions, make backups or display logs.
 
 ![](http://zekro.de/ss/ConEmu64_2018-01-06_16-15-29.png)
+*Screenshot is not up to date!*
 
 ---
 
