@@ -1,4 +1,5 @@
-if [ "$2" = "noloop" ]; then
+cd $2
+if [ "$3" = "noloop" ]; then
     $1
 else
     while true; do

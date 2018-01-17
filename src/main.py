@@ -62,10 +62,13 @@ def handle_command(cmd, servers):
     """
     if not servers:
         servers = get_servers()
+    if len(cmd) == 0:
+        return
     invoke = cmd.split()[0]
     args = cmd.split()[1:]
 
     def _select(args):
+        args_s = " ".join(args).lower().replace(" noloop", "")
         try:
             ind = int(args[0]) - 1
             if ind > len(servers) or ind < 0:
@@ -73,7 +76,7 @@ def handle_command(cmd, servers):
             return servers[ind]
         except:
             for s in servers:
-                if " ".join(args).lower() in s.lower():
+                if args_s in s.lower():
                     return s
             return None
 
@@ -91,7 +94,9 @@ def handle_command(cmd, servers):
             "   backup [ind/name]   Create a backup of a server\n"
             "   logs (p)            Display log from 'screenlog.0'\n"
             "                       (p) -> Create file in apache server to display\n"
-            "                              log online\n\n"
+            "                              log online\n"
+            "   e                   Exit tool\n"
+            "   <Enter>             If you just press enter the list will refresh\n\n"
             " [Press enter to continue...]\n\n"
         )
 
@@ -100,6 +105,7 @@ def handle_command(cmd, servers):
         if len(args) == 0:
              input("USAGE: start [ind/name]\n")
              return
+        noloop = "noloop" in args
         server = _select(args)
         if not server:
             input(clr.w.r("[ERROR] ") + "Can not find server '%s'..." % (" ".join(args)))
@@ -109,7 +115,7 @@ def handle_command(cmd, servers):
             input(clr.w.r("[ERROR] ") + "The start script of the server is empty...")
         else:
             try:
-                subprocess.call(["screen", "-S", server, "-L", "sh", "src/runner.sh", get_start_script(server)])
+                subprocess.call(["screen", "-S", server, "-L", "sh", "src/runner.sh", get_start_script(server), server, "noloop" if noloop else ""])
             except Exception as e:
                 input(clr.w.r("[ERROR] ") + "An unexpected error occured while starting:\n" + e)
 
@@ -204,7 +210,7 @@ def print_main(servers):
     for s in servers:
         ind += 1
         print(
-            _running(s) + clr.w.b("[%s] " % _indify(ind)) + _pad(s) + clr.w.p("['%s']" % _cut(get_start_script(s), 35))
+            _running(s) + clr.w.b("[%s] " % _indify(ind)) + _pad(s) + clr.w.p("['%s']" % _cut(get_start_script(s).replace("\n", ""), 35))
         )
 
     return input("\n\nEnter 'help' for a list of commands.\n> ")

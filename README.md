@@ -36,9 +36,9 @@ Then you can re-enable it with
 ## TODO
 
 - [ ] Add commands
-    - [x] start *(1)*
+    - [x] start <img height="20" src="https://img.shields.io/badge/status*-passed-green.svg">
     - [x] stop *(1)*
-    - [x] resume *(1)*
+    - [x] resume 
     - [ ] backup
     - [ ] logs
     - [ ] *rename (?)*
@@ -50,4 +50,4 @@ Then you can re-enable it with
 - [ ] Config  
 *To set stuff like servers location, backup location...* 
 
-*(1) - Implemented, needs to be tested in a real server envoirement.*
+*\* - Test status in my real server evnoirement on my VPS.*

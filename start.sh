@@ -14,25 +14,34 @@ git=true
 py3=true
 py=true
 
+# Testing if 'git' command works
 type git >/dev/null 2>&1 || {
     git=false
 }
 
+# Testing if 'python3' command works
 type python3 >/dev/null 2>&1 || {
     py3=false
 }
 
+# Testing if 'python' command works
 type python >/dev/null 2>&1 || {
     py=false
 }
 
-# echo $1; exit
-
+# When 'disable-updat' parameter is given, there will be
+# created a file named 'DISABLEUPDATE' in root directory
+# of this script to signal that updated should not pulled
+# automatically on startup
 if [ "$1" = "disable-update" ]
 then
     echo " " >> DISABLEUPDATE
 fi
 
+# If parameter 'enable-update' is given and the file
+# 'DISABLEUPDATE' is existing, the file will be deleted
+# so that the tool will automatically pull updates from
+# origin repository
 if [ "$1" = "enable-update" ]
 then
     if [ -f DISABLEUPDATE ]
@@ -41,6 +50,12 @@ then
     fi
 fi
 
+# If git is available (tested above), the tool will
+# automatically update itself by pulling the lastest
+# master commit from origin repository on github.
+# If parameter 'noupdate' is entered or if the file
+# 'DISABLEUPDATE' is existing in this direcoty, this
+# steps will be skipped
 if ! $git
 then
     echo "Git is not accessable!"
@@ -48,11 +63,14 @@ then
 else
     if [ -f DISABLEUPDATE ]
     then
-        echo "AUTO-UPDATE DISABLED!"
-        echo "You can re-enable it with parameter 'enable-update'"
-        echo ""
-        echo "[Starting in 3 seconds...]"
-        sleep 3
+        # if you want to disable the warning message, just delete this #
+        # part of code.                                                #
+        echo "AUTO-UPDATE DISABLED!"                                   #
+        echo "You can re-enable it with parameter 'enable-update'"     #
+        echo ""                                                        #
+        echo "[Starting in 3 seconds...]"                              #
+        sleep 3                                                        #
+        ################################################################
     else
         if [ ! "$1" = "noupdate" ]
         then
@@ -67,6 +85,10 @@ else
     fi
 fi
 
+# Now, if python3 is installed, the tool will start the main script with
+# python3. Else, if python2 is installed, it will TRY starting the script
+# with this version, which will - depending on the python version -
+# fail with a very high probability
 if $py3
 then
     python3 src/main.py
