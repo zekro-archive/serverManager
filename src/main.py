@@ -26,9 +26,10 @@ def get_servers():
     Returns a array of dirs wher the "run.sh" file
     exists in the directory.
     """
+    rd = conf["dirs"]["servers"] + "/"
     out = []
-    for d in os.listdir(conf["dirs"]["servers"]):
-        for (path, dirs, files) in os.walk(d):
+    for d in os.listdir(rd):
+        for (path, dirs, files) in os.walk(rd + d):
             if files and "run.sh" in files:
                 out.append(d)
     return out
@@ -171,7 +172,11 @@ def print_main(servers):
             "+---------------------------------+\n"
     ))
 
-    print(perf.getSys() + "\n")
+    print(perf.getSys())
+    print(
+        "  Server Dir: " + conf["dirs"]["servers"] + "\n" +
+        "  Backup Dir: " + conf["dirs"]["backups"] + "\n\n"
+    )
 
     def _pad(string, cap):
         """

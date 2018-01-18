@@ -102,7 +102,7 @@ else
             git init
             git remote add origin https://github.com/zekroTJA/serverManager.git
             git update-index --assume-unchanged config.json
-            git pull origin master
+            git pull -f
             echo "-----------------------------------------"
             echo "Completed updating repository."
         fi
