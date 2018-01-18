@@ -1,0 +1,30 @@
+{
+    // Settings for directories
+    "dirs": {
+        // Directory of server folders with
+        // 'run.sh' file in them
+        "servers": "./",
+        // Location where backups should
+        // be placed in
+        "backups": "./backups/"
+    },
+
+    // Settings about UI style
+    "style": {
+        // The server status infront the server names
+        // ('[RUNNING] ... ' / '[STOPPED] ...')
+        "status": {
+            "running": "RUNNING",
+            "stopped": "STOPPED"
+        },
+        // Width caps of server table
+        "width": {
+            // Width cap of server names after index (chars)
+            // Default: 20
+            "names": 20,
+            // Width cap of start scripts after server names (chars)
+            // Default: 35
+            "execs": 35
+        }
+    }
+}
