@@ -4,18 +4,19 @@
 
 import os
 import sys
-from utils import colors, msgs, system
+from utils import colors, msgs, system, config
 import subprocess
-import json
 import shutil
 
-# getting start arguments (later essential for direct start / stpo with args)
+# getting start arguments (later essential for direct start / stop with args)
 args = sys.argv
 last_inpt = ""
 
 clr = colors.Colors
 msgs = msgs.Msgs
 perf = system.Sys
+
+conf = config.Config("./config.json").get_config()
 
 def clear():
     subprocess.call("clear")
@@ -26,7 +27,7 @@ def get_servers():
     exists in the directory.
     """
     out = []
-    for d in os.listdir("."):
+    for d in os.listdir(conf["dirs"]["servers"]):
         for (path, dirs, files) in os.walk(d):
             if files and "run.sh" in files:
                 out.append(d)
@@ -54,7 +55,7 @@ def get_start_script(server):
     Returns the content of the start script ('run.sh')
     of the server.
     """
-    return open(server + "/run.sh").readline()
+    return open(conf["dirs"]["servers"] + "/" + server + "/run.sh").readline()
 
 
 def handle_command(cmd, servers):
@@ -116,7 +117,7 @@ def handle_command(cmd, servers):
             input(clr.w.r("[ERROR] ") + "The start script of the server is empty...")
         else:
             try:
-                subprocess.call(["screen", "-S", server, "-L", "sh", "src/runner.sh", get_start_script(server), server, "noloop" if noloop else ""])
+                subprocess.call(["screen", "-S", server, "-L", "sh", "src/runner.sh", get_start_script(server), conf["dirs"]["servers"] + "/" + server, "noloop" if noloop else ""])
             except Exception as e:
                 input(clr.w.r("[ERROR] ") + "An unexpected error occured while starting:\n" + e)
 
@@ -172,17 +173,16 @@ def print_main(servers):
 
     print(perf.getSys() + "\n")
 
-    def _pad(string):
+    def _pad(string, cap):
         """
         Add spcaes after server name for formatting
         or shot them if they are over 16 chars long.
         """
         out = string
         # Max length of every server name row
-        CAP = 20
-        if len(string) > CAP - 4:
-            return string[:CAP - 4] + "... "
-        while len(out) < CAP:
+        if len(string) > cap - 4:
+            return string[:cap - 4] + "... "
+        while len(out) < cap:
             out += " "
         return out
 
@@ -197,21 +197,24 @@ def print_main(servers):
         the index will be transformed to [01] instead
         of defaultly [1] for example.
         """
-        if len(servers) > 10:
-            return "0"+ inp if inp < 10 else inp
+        if len(servers) > 9:
+            return "0" + str(inp) if inp < 10 else inp
         return inp
 
     def _running(s):
         """
         Returns status string for server list.
         """
-        return clr.w.g(" [RUNNING] ") if is_running(s) else clr.w.o(" [STOPPED] ")
+        return clr.w.g(" [%s] " % conf["style"]["status"]["running"]) if is_running(s) else clr.w.o(" [%s] " % conf["style"]["status"]["stopped"])
 
     ind = 0
     for s in servers:
         ind += 1
         print(
-            _running(s) + clr.w.b("[%s] " % _indify(ind)) + _pad(s) + clr.w.p("['%s']" % _cut(get_start_script(s).replace("\n", ""), 35))
+            _running(s) +                                                                                     # Running status
+            clr.w.b("[%s] " % _indify(ind)) +                                                                 # Index
+            _pad(s, conf["style"]["width"]["names"]) +                                                        # Server name (capped by length)
+            clr.w.p("['%s']" % _cut(get_start_script(s).replace("\n", ""), conf["style"]["width"]["execs"]))  # Start script (capped by length)
         )
 
     return input("\n\nEnter 'help' for a list of commands.\n> ")

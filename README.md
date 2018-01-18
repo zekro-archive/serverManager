@@ -48,5 +48,5 @@ Then you can re-enable it with
 - [ ] Add args handling  
 *Starning and stopping the server directly with start arguments of the script. For example like this:*  
 `main.py start servername`
-- [ ] Config  
+- [x] Config *(needs to be tested)*
 *To set stuff like servers location, backup location...* 
