@@ -113,6 +113,9 @@ else
                 cd $currdir
                 mv config_ex.json config.json
             else
+                if [ ! -f config.json ] && [ -f config_ex.json ]; then
+                    mv config_ex.json config.json
+                fi
                 echo "Pulling update from origin repository..."
                 echo "-----------------------------------------"
                 git pull origin master
@@ -127,6 +130,11 @@ fi
 # python3. Else, if python2 is installed, it will TRY starting the script
 # with this version, which will - depending on the python version -
 # fail with a very high probability
+
+if [ $1 = "nostart" ]; then
+    exit 1
+fi
+
 if $py3
 then
     python3 src/main.py

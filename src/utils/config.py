@@ -6,8 +6,9 @@ class Config:
     def __init__(self, path):
         if not os.path.isfile(path):
             Msgs.error(
-                "Config file not found!\nPlease Download the file from:\n" +
-                "https://github.com/zekroTJA/serverManager"
+                "Config file not found!\nPlease Download the file from\n" +
+                "https://github.com/zekroTJA/serverManager/blob/master/config_ex.json\n" +
+                "and rename it to 'config.json'!"
             )
             exit(1)
         with open(path, "r") as f:
