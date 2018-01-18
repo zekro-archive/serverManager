@@ -97,14 +97,28 @@ else
     else
         if [ ! "$1" = "noupdate" ]
         then
-            echo "Pulling update from origin repository..."
-            echo "-----------------------------------------"
-            git init
-            git remote add origin https://github.com/zekroTJA/serverManager.git
-            git update-index --assume-unchanged config.json
-            git pull -f
-            echo "-----------------------------------------"
+            if [ ! -d .git ]
+            then
+                echo "------------------------ ATTENTION ------------------------------"
+                echo "This is not a cloned repository."
+                echo "This folder will be deleted and cloned from repository."
+                read -p "Continue? (y/n)" res
+                if [ "$res" = "n" ]; then exit; fi
+                echo "-----------------------------------------------------------------"
+                echo "Cloning repository..."
+                currdir=$PWD
+                cd ..
+                rm -r $currdir
+                git clone https://github.com/zekroTJA/serverManager.git $currdir
+                cd $currdir
+                mv config_ex.json config.json
+            else
+                echo "Pulling update from origin repository..."
+                echo "-----------------------------------------"
+                git pull origin master
+                echo "-----------------------------------------"
             echo "Completed updating repository."
+            fi
         fi
     fi
 fi

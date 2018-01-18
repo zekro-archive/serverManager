@@ -4,3 +4,4 @@ secrets.json
 __pychache__/*
 src/__pychache__/*
 src/utils/__pychache__/*
+config.json
