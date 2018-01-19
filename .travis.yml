@@ -1,4 +1,4 @@
 language: python
 sudo: false
 
-script: "bash start.sh noupdate"
+script: "python3.6 src/main.py travis"
