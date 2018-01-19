@@ -96,4 +96,5 @@ So there are some interesting commandsyou can use with this script listed below:
 *Starning and stopping the server directly with start arguments of the script. For example like this:*  
 `main.py start servername`
 - [x] Config *(needs to be tested)*
-*To set stuff like servers location, backup location...* 
+*To set stuff like servers location, backup location...*
+- [ ] "Running since" display 
