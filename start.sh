@@ -39,7 +39,8 @@ if [ ! -z $1 ]; then
         echo "  noupdate         Start without checking for update"
         echo "  disable-update   Permanently disable update check on start"
         echo "  enable-update    Re-enable auto-update at start"
-        echo "  reset            Reset setting for updates and package check"
+        echo "  reset            Reset setting for updates, package check and"
+        echo "                   nollop function save"
         echo "  nostart          Only update without starting src/main.py"
         echo "                   Actually for development purpose"
         echo ""
@@ -57,7 +58,8 @@ if [ ! -z $1 ]; then
     if [ $1 = "reset" ]; then
         rm DISABLEUPDATE >/dev/null 2>&1
         rm CHECKEDPACKAGES >/dev/null 2>&1
-        echo "Reset DISABLEUPDATE and CHECKEDPACKAGES"
+        rm noloop.json >/dev/null 2>&1
+        echo "Reset DISABLEUPDATE, CHECKEDPACKAGES and noloop.json"
         exit
     fi
 fi

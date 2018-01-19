@@ -22,15 +22,62 @@ This is a script where you can start screens, stop them, resume the sessions, ma
 `$ git clone https://github.com/zekroTJA/serverManager.git`
 
 3. Then cd into the repository and start the start file with  
-`$ sh start.sh`
+`$ bash start.sh`
 
 > The start file automatically updates the repository when starting.  
 If you don't want to update at start, execute the script like following:  
-`$ sh start.sh noupdate`  
+`$ bash start.sh noupdate`  
 You can also disable auto-updating completely with  
-`$ sh start.sh disable-update`  
+`$ bash start.sh disable-update`  
 Then you can re-enable it with  
-`$ sh start.sh enable-update`
+`$ bash start.sh enable-update`
+
+---
+
+## Commands
+
+- **help**  
+*Display a help message about all commands*<br><br>
+- **start [ind/name]**  
+*Start a server by index or part of the name*<br><br>
+- **stop [ind/name]**  
+*Stop a server by index or part of the name*<br><br>
+- **resume [ind/name]**  
+*Resume a server by index or part of the name*<br><br>
+- **backup [ind/name]**  
+*Create a backup of a server by index or part of the name in the specified backup directory*<br><br>
+- **loop [ind/name]**  
+*Toggles if a server should start in loop mode or not*  
+*Settings are saved in `noloop.json` file*<br><br>
+- **e**  
+*Exit the application*<br><br>
+
+---
+
+## `start.sh` commands
+
+> The `start.sh` file is a very powerfull script not just for starting the main python application, also for updating it with the github repository, checking for pip packages and checking or downloading and configuring the configuration file of the application.  
+So there are some interesting commandsyou can use with this script listed below:
+
+`USAGE: bash start.sh help`
+
+- **help**  
+*Display help message about arguments*<br><br>
+- **conf** | **config**  
+*Open an editor with the config.json for editing it*<br><br>
+- **noupdate**  
+*Start the main script without checking for updates*<br><br>
+- **disable-update**  
+*Permanently disable update check at start*  
+*Technically it's solved by creating and checking for a file named `DISABLEUPDATE` in the scripts root directory.*<br><br>
+- **enable-update**  
+*Re-enable auto-updating at start*<br><br>
+- **reset**  
+*Reset settings for auto updating and package checking*  
+*At first start, the tool will check for pip packages required and download them if needed, then it will create a file named `CHECKEDPACKAGES` to mark that they don't need to be checked at next start. This file will also be deleted with this command.*<br><br>
+- **nostart**  
+*With this parameter, the script will only check for updates and not start after.*  
+*Actually it's just for development purpose ^^*<br><br>
 
 ---
 

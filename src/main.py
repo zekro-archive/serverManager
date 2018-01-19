@@ -4,7 +4,7 @@
 
 import os
 import sys
-from utils import colors, msgs, system, config
+from utils import colors, msgs, system, config, loop
 import subprocess
 import shutil
 
@@ -15,6 +15,9 @@ last_inpt = ""
 clr = colors.Colors
 msgs = msgs.Msgs
 perf = system.Sys
+
+loopHandler = loop.Loop()
+noloops = loopHandler.get_c()
 
 conf = config.Config("./config.json").get_config()
 
@@ -59,6 +62,12 @@ def get_start_script(server):
     return open(conf["dirs"]["servers"] + "/" + server + "/run.sh").readline()
 
 
+def as_noloop(server):
+    if server in noloops:
+        return noloops[server]
+    return False
+
+
 def handle_command(cmd, servers):
     """
     Handling commands.
@@ -98,6 +107,9 @@ def handle_command(cmd, servers):
             "   logs (p)            Display log from 'screenlog.0'\n"
             "                       (p) -> Create file in apache server to display\n"
             "                              log online\n"
+            "   loop [ind/nam]      Toggle loop start\n" +
+            clr.w.r("                       [This means it will start in loop]\n") +
+            "                       [This means it will not start in loop]\n"
             "   e                   Exit tool\n"
             "   <Enter>             If you just press enter the list will refresh\n\n"
             " [Press enter to continue...]\n\n"
@@ -118,7 +130,7 @@ def handle_command(cmd, servers):
             input(clr.w.r("[ERROR] ") + "The start script of the server is empty...")
         else:
             try:
-                subprocess.call(["screen", "-S", server, "-L", "sh", "src/runner.sh", get_start_script(server), conf["dirs"]["servers"] + "/" + server, "noloop" if noloop else ""])
+                subprocess.call(["screen", "-S", server, "-L", "sh", "src/runner.sh", get_start_script(server), conf["dirs"]["servers"] + "/" + server, "noloop" if (noloop or as_noloop(server)) else ""])
             except Exception as e:
                 input(clr.w.r("[ERROR] ") + "An unexpected error occured while starting:\n" + e)
 
@@ -153,6 +165,18 @@ def handle_command(cmd, servers):
                 subprocess.call(["screen", "-r", server])
             except Exception as e:
                 input(clr.w.r("[ERROR] ") + "An unexpected error occured while resuming:\n" + e)
+
+    # Loop command
+    elif invoke == "loop":
+        if len(args) == 0:
+            input("USAGE: loop [ind/name]\n")
+            return
+        server = _select(args)
+        if server in noloops:
+            noloops[server] = not noloops[server]
+        else:
+            noloops[server] = True
+        loopHandler.set_c(noloops)
 
 
 def print_main(servers):
@@ -212,14 +236,17 @@ def print_main(servers):
         """
         return clr.w.g(" [%s] " % conf["style"]["status"]["running"]) if is_running(s) else clr.w.o(" [%s] " % conf["style"]["status"]["stopped"])
 
+    def _loop(s, cont):
+        return cont if as_noloop(s) else clr.w.p(cont)
+
     ind = 0
     for s in servers:
         ind += 1
         print(
-            _running(s) +                                                                                     # Running status
-            clr.w.b("[%s] " % _indify(ind)) +                                                                 # Index
-            _pad(s, conf["style"]["width"]["names"]) +                                                        # Server name (capped by length)
-            clr.w.p("['%s']" % _cut(get_start_script(s).replace("\n", ""), conf["style"]["width"]["execs"]))  # Start script (capped by length)
+            _running(s) +                                                                                      # Running status
+            clr.w.b("[%s] " % _indify(ind)) +                                                                  # Index
+            _pad(s, conf["style"]["width"]["names"]) +                                                         # Server name (capped by length)
+            _loop(s, "['%s']" % _cut(get_start_script(s).replace("\n", ""), conf["style"]["width"]["execs"]))  # Start script (capped by length)
         )
 
     return input("\n\nEnter 'help' for a list of commands.\n> ")
