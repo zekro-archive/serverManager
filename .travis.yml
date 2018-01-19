@@ -1,4 +1,4 @@
 language: python
 sudo: false
 
-script: "python3.6 src/main.py travis"
+script: "python3.6.3 src/main.py travis"
