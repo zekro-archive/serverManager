@@ -1,4 +1,9 @@
 language: python
-sudo: false
+python:
+  - "3.6"
 
-script: "python3.6.3 src/main.py travis"
+install:
+  - pip install -r psutil
+
+script:
+  - pytest
