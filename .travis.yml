@@ -1,0 +1,4 @@
+language: python
+sudo: false
+
+script: "bash start.sh noupdate"
