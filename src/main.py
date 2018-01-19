@@ -19,7 +19,7 @@ perf = system.Sys
 loopHandler = loop.Loop()
 noloops = loopHandler.get_c()
 
-conf = config.Config("./config.json").get_config()
+conf = config.Config("./config_ex.json" if "travis" in args else "./config.json").get_config()
 
 def clear():
     subprocess.call("clear")
