@@ -171,10 +171,6 @@ else
                 mv config_ex.json config.json
                 edit_config
             else
-                if [ ! -f config.json ] && [ -f config_ex.json ]; then
-                    mv config_ex.json config.json
-                    edit_config
-                fi
                 echo "Pulling update from origin repository..."
                 echo "-----------------------------------------"
                 git pull origin master
@@ -185,7 +181,12 @@ else
     fi
 fi
 
-if [ ! -f config.json ]
+if [ ! -f config.json ] && [ -f config_ex.json ]; then
+    mv config_ex.json config.json
+    edit_config
+fi
+
+if [ ! -f config.json ] && [ ! -f config_ex.json ]
 then
     echo "------------------------------- ATTENTION ------------------------------------"
     echo "No 'config.json' found!"
