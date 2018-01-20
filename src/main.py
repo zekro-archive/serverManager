@@ -4,7 +4,7 @@
 
 import os
 import sys
-from utils import colors, msgs, system, config, loop
+from utils import colors, msgs, system, config, loop, tmstmp
 import subprocess
 import shutil
 
@@ -20,6 +20,7 @@ loopHandler = loop.Loop()
 noloops = loopHandler.get_c()
 
 conf = config.Config("./config_ex.json" if "travis" in args else "./config.json").get_config()
+tmstmp.conf = conf
 
 def clear():
     subprocess.call("clear")
@@ -129,6 +130,7 @@ def handle_command(cmd, servers):
         elif not get_start_script(server):
             input(clr.w.r("[ERROR] ") + "The start script of the server is empty...")
         else:
+            tmstmp.set_timestamp(server)
             try:
                 subprocess.call(["screen", "-S", server, "-L", "sh", "src/runner.sh", get_start_script(server), conf["dirs"]["servers"] + "/" + server, "noloop" if (noloop or as_noloop(server)) else ""])
             except Exception as e:
