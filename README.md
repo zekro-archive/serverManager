@@ -100,3 +100,4 @@ So there are some interesting commandsyou can use with this script listed below:
 - [x] Config *(needs to be tested)*
 *To set stuff like servers location, backup location...*
 - [x] "Running since" display 
+*So you can see in the main screen how long the servers are runnuing after last (re-)start*
