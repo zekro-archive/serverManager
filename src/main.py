@@ -180,6 +180,30 @@ def handle_command(cmd, servers):
             noloops[server] = True
         loopHandler.set_c(noloops)
 
+    # Restart command
+    elif invoke == "restart":
+        if len(args) == 0:
+            input("USAGE: restart [ind/name]\n")
+            return
+        noloop = "noloop" in args
+        server = _select(args)
+        if not server:
+            input(clr.w.r("[ERROR] ") + "Can not find server '%s'..." % (" ".join(args)))
+        if not is_running(server):
+            input(clr.w.r("[ERROR] ") + "You can not restart a not running server...")
+        else:
+            try:
+                subprocess.call(["screen", "-X", "-S", server, "quit"])
+            except Exception as e:
+                input(clr.w.r("[ERROR] ") + "An unexpected error occured while stopping:\n" + e)
+                return
+            tmstmp.set_timestamp(server)
+            try:
+                subprocess.call(["screen", "-S", server, "-L", "sh", "src/runner.sh", get_start_script(server), conf["dirs"]["servers"] + "/" + server, "noloop" if (noloop or as_noloop(server)) else ""])
+            except Exception as e:
+                input(clr.w.r("[ERROR] ") + "An unexpected error occured while starting:\n" + e)
+
+
 
 def print_main(servers):
     """

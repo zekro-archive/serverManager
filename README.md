@@ -44,6 +44,8 @@ Then you can re-enable it with
 *Stop a server by index or part of the name*<br><br>
 - **resume [ind/name]**  
 *Resume a server by index or part of the name*<br><br>
+- **restart [ind/name]**  
+*Restarts a server by index or name*<br><br>
 - **backup [ind/name]**  
 *Create a backup of a server by index or part of the name in the specified backup directory*<br><br>
 - **loop [ind/name]**  
@@ -97,4 +99,4 @@ So there are some interesting commandsyou can use with this script listed below:
 `main.py start servername`
 - [x] Config *(needs to be tested)*
 *To set stuff like servers location, backup location...*
-- [ ] "Running since" display 
+- [x] "Running since" display 
