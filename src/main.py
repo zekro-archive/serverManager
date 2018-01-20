@@ -236,7 +236,10 @@ def print_main(servers):
         """
         Returns status string for server list.
         """
-        return clr.w.g(" [%s] " % conf["style"]["status"]["running"]) if is_running(s) else clr.w.o(" [%s] " % conf["style"]["status"]["stopped"])
+        _is_running = is_running(s)
+        time_running = tmstmp.get_timestamp(s)
+        status = " [%s] " % ((time_running if time_running else conf["style"]["status"]["running"]) if _is_running else conf["style"]["status"]["stopped"])
+        return clr.w.g(status) if _is_running else clr.w.o(status)
 
     def _loop(s, cont):
         return cont if as_noloop(s) else clr.w.p(cont)

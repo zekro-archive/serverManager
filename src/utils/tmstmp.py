@@ -18,7 +18,7 @@ def set_timestamp(server):
 
 def get_timestamp(server):
     def _pad(s, l):
-        out = str(s)
+        out = str(int(s))
         while len(out) < l:
             out = "0" + out
         return out
@@ -31,4 +31,4 @@ def get_timestamp(server):
             h = delay % 86400 / 3600
             return "%s:%s" % (_pad(d, 4), _pad(h, 2))
     else:
-        return " ERROR "
+        return None
