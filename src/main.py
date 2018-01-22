@@ -4,7 +4,7 @@
 
 import os
 import sys
-from utils import colors, msgs, system, config, loop, tmstmp
+from utils import colors, msgs, system, config, loop, tmstmp, backup
 import subprocess
 import shutil
 
@@ -33,9 +33,11 @@ def get_servers():
     rd = conf["dirs"]["servers"] + "/"
     out = []
     for d in os.listdir(rd):
-        for (path, dirs, files) in os.walk(rd + d):
-            if files and "run.sh" in files:
+        try:
+            if "run.sh" in [w for w in os.walk(rd + d)][0][2]:
                 out.append(d)
+        except:
+            pass
     return out
 
 
@@ -109,8 +111,8 @@ def handle_command(cmd, servers):
             "                       (p) -> Create file in apache server to display\n"
             "                              log online\n"
             "   loop [ind/nam]      Toggle loop start\n" +
-            clr.w.r("                       [This means it will start in loop]\n") +
-            "                       [This means it will not start in loop]\n"
+            clr.w.p("                       [This means it will start in loop]\n") +
+            "                       [This color means it will not start in loop]\n"
             "   e                   Exit tool\n"
             "   <Enter>             If you just press enter the list will refresh\n\n"
             " [Press enter to continue...]\n\n"
@@ -203,6 +205,17 @@ def handle_command(cmd, servers):
             except Exception as e:
                 input(clr.w.r("[ERROR] ") + "An unexpected error occured while starting:\n" + e)
 
+    # Backup command
+    elif invoke == "backup":
+        if len(args) == 0:
+            input("USAGE: backup [ind/name]\n")
+            return
+        server = _select(args)
+        if not server:
+            input(clr.w.r("[ERROR] ") + "Can not find server '%s'..." % (" ".join(args)))
+        else:
+            backup.Backup(server, conf["dirs"]["servers"], conf["dirs"]["backups"])
+
 
 
 def print_main(servers):
@@ -283,7 +296,7 @@ def print_main(servers):
 
 # MAIN SECTION
 
-while last_inpt not in ["exit", "stop", "e", "s"]:
+while last_inpt not in ["e", "exit", "q", "quit", "stop", "s"]:
     servers = get_servers()
     last_inpt = print_main(servers)
     handle_command(last_inpt, servers)

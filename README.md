@@ -7,8 +7,8 @@
  ---
 This is a script where you can start screens, stop them, resume the sessions, make backups or display logs.
 
-![](http://zekro.de/ss/ConEmu64_2018-01-06_16-15-29.png)  
-*Screenshot is not up to date!*
+![](https://zekro.de/src/servermanagementsystem_c39_screen.png)  
+*Screenshot topicality: Commit #39*
 
 ---
 
@@ -47,7 +47,7 @@ Then you can re-enable it with
 - **restart [ind/name]**  
 *Restarts a server by index or name*<br><br>
 - **backup [ind/name]**  
-*Create a backup of a server by index or part of the name in the specified backup directory*<br><br>
+*Create a backup of a server by index or part of the name in the specified backup directory, restore or delete a backup*<br><br>
 - **loop [ind/name]**  
 *Toggles if a server should start in loop mode or not*  
 *Settings are saved in `noloop.json` file*<br><br>
@@ -89,8 +89,9 @@ So there are some interesting commandsyou can use with this script listed below:
     - [x] start
     - [x] stop
     - [x] resume
-    - [ ] backup
-    - [ ] logs
+    - [x] backup
+    - [ ] logs *(?)*  
+    *This seems more problematic as I thought before, because thre running screen process refers to the root location of the `runner.sh` file while writing the `screenlog.0`, which I wanted to dispaly here. So every running server is inserting their logs into the same `screenlog.0` file so it's senseless to display it. Maybe there is a special parameter for screen to change this?*
     - [ ] *rename (?)*
     - [x] help
     - [x] exit
