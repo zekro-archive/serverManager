@@ -32,6 +32,64 @@ You can also disable auto-updating completely with
 Then you can re-enable it with  
 `$ bash start.sh enable-update`
 
+### Permissions
+
+> For following commands we assume that the ServerManagers install location is ***/serverManager*** and the server accounts name is ***server***.
+
+There could be some problems with missing permissions.
+First of all, be sure, that the user, you are starting the ServerManager with, has full permissions to the directory, the ServerManager is running in. Else, you could get an exception like this:
+```
+Traceback (most recent call last):
+  File "src/main.py", line 302, in <module>
+    handle_command(last_inpt, servers)
+  File "src/main.py", line 135, in handle_command
+    tmstmp.set_timestamp(server)
+  File "/serverManager/src/utils/tmstmp.py", line 15, in set_timestamp
+    with open("%s/%s/STARTTIME" % (conf["dirs"]["servers"], server), "w") as fw:
+PermissionError: [Errno 13] Permission denied: '/*yourserverloc*/STARTTIME'
+````
+
+You can check folder permissions with the following commands:
+```
+$ cd /serverManager
+$ ls -lisah
+```
+
+Then it should look like this:
+```
+total 444K
+97260575 4.0K drwxrwxrwx  4 server root   4.0K Jan 25 08:33 .
+95552298 4.0K drwxr-xr-x 29 root   root   4.0K Jan 18 11:06 ..
+97259970 4.0K -rw-------  1 server server  173 Jan 25 08:33 .bash_history
+97260576 4.0K drwxr-xr-x  8 server root   4.0K Jan 25 08:36 .git
+97260615 4.0K -rw-r--r--  1 server root     66 Jan 18 11:06 .gitattributes
+97260616 4.0K -rw-r--r--  1 server root     94 Jan 18 11:06 .gitignore
+97260635 4.0K -rw-r--r--  1 server root     10 Jan 18 15:42 CHECKEDPACKAGES
+97260617 4.0K -rw-r--r--  1 server root   1.6K Jan 18 11:06 README.md
+97260627 4.0K -rw-r--r--  1 server root    847 Jan 18 13:57 config.json
+97260632 4.0K -rw-r--r--  1 server root     13 Jan 19 08:10 noloop.json
+97260647 384K -rw-r--r--  1 server root   377K Jan 25 08:23 screenlog.0
+97260619 4.0K drwxr-xr-x  4 server root   4.0K Jan 20 12:01 src
+97260618 8.0K -rw-r--r--  1 server root   7.2K Jan 18 15:43 start
+97260646 8.0K -rw-r--r--  1 server root   7.2K Jan 19 07:23 start.sh
+```
+
+Else, you can get permissions with entering following command as **root**:
+```
+$ chown -R server /serverManager
+# Parameter "-R" will execute own rights recoursively
+```
+
+If you get errors like this:
+
+![](https://zekro.de/src/servermanager_screen_noperms.png)
+
+Then you may need to grant execution permissions to the **`runner.sh`** file:  
+*This command needs also be executed as **root**.*
+```
+$ chmod +x /serverManager/src/runner.sh
+```
+
 ---
 
 ## Commands
